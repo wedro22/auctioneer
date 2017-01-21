@@ -1,0 +1,16 @@
+[
+{
+  "modid": "auctioneer",
+  "name": "auctioneer",
+  "description": "auction, wow!",
+  "version": "1.0",
+  "mcversion": "1.10.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["wedro22"],
+  "credits": "auction from warcraft",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

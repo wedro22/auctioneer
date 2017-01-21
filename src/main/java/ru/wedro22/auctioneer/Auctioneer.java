@@ -30,7 +30,7 @@ public class Auctioneer
         AChat.chatServToPlayer(br.getPlayer(),"wow! (serv)");
 
         Style style = new Style();
-        //style.setColor(TextFormatting.RED);
+        style.setColor(TextFormatting.RED);
         style.setBold(true);
         style.setUnderlined(true);
         style.setStrikethrough(true);

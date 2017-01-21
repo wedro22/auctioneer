@@ -32,8 +32,17 @@ public class AChat {
     {
         EntityPlayerMP pl = (EntityPlayerMP) player;
         pl.addChatMessage(new TextComponentString(message));
-
     }
+    public static void chatServToPlayer(EntityPlayer player, String message, Style style)
+    {
+        EntityPlayerMP pl = (EntityPlayerMP) player;
+        TextComponentString tcs = new TextComponentString(message);
+        tcs.setStyle(style);
+        pl.addChatMessage(tcs);
+    }
+
+
+
 }
 
 

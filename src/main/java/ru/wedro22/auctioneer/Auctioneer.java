@@ -7,8 +7,10 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ru.wedro22.auctioneer.util.AChat;
+import ru.wedro22.auctioneer.util.ACommands;
 
 
 @Mod(modid = Auctioneer.MODID, version = Auctioneer.VERSION)
@@ -36,6 +38,11 @@ public class Auctioneer
         style.setStrikethrough(true);
 
         AChat.chatClient("wow, colored!", style);
+    }
+
+    @EventHandler
+    public void servStarting(FMLServerStartingEvent event){
+        event.registerServerCommand(new ACommands());
     }
 
 }

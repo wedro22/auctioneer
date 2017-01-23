@@ -8,21 +8,18 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.ArrayList;
-
 /**
  * new commands (chat)
  */
 public class ACommands{
-    public static ArrayList<CommandBase> getCommands(){
-        ArrayList<CommandBase> commands = new ArrayList<CommandBase>();
 
-        commands.add(new Test1());
-        commands.add(new Test2());
-        commands.add(new Test3());
-
-        return commands;
-    }
+    public static CommandBase[] commands=
+    {
+        new Test1(),
+        new Test2(),
+        new Test3(),
+        new Cp()
+    };
 
     private static class Test1 extends CommandBase{
 
@@ -92,31 +89,21 @@ public class ACommands{
             AChat.chatServToPlayer(entityplayer, message, style);
         }
     }
+    private static class Cp extends CommandBase{
+
+        @Override
+        public String getCommandName() {
+            return "cp";
+        }
+
+        @Override
+        public String getCommandUsage(ICommandSender sender) {
+            return "cp";
+        }
+
+        @Override
+        public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+
+        }
+    }
 }
-
-
-/*public class ACommands extends CommandBase{
-
-    @Override
-    public String getCommandName() {
-        return "acommands";
-    }
-
-    @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "draw text acommands";
-    }
-
-    @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        EntityPlayer entityplayer = getCommandSenderAsPlayer(sender);
-        AChat.chatServToPlayer(entityplayer, "TESTCOMMAND!");
-    }
-}*/
-
-
-        /*ненужное
-        MinecraftServer server=
-        ICommandManager command = server.getCommandManager();
-        ServerCommandManager manager = new ServerCommandManager((MinecraftServer) command);
-        manager.registerCommand(new ACommands());*/

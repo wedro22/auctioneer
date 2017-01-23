@@ -13,8 +13,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ru.wedro22.auctioneer.util.AChat;
 import ru.wedro22.auctioneer.util.ACommands;
 
-import java.util.ArrayList;
-
 
 @Mod(modid = Auctioneer.MODID, version = Auctioneer.VERSION)
 public class Auctioneer
@@ -45,7 +43,7 @@ public class Auctioneer
 
     @EventHandler
     public void servStarting(FMLServerStartingEvent event){
-        for (CommandBase command : ACommands.getCommands()) {
+        for (CommandBase command : ACommands.commands) {
             event.registerServerCommand(command);
         }
     }

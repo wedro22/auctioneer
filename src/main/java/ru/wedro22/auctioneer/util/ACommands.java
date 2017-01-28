@@ -4,9 +4,13 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import ru.wedro22.auctioneer.LotObject;
 
 /**
  * new commands (chat)
@@ -15,13 +19,14 @@ public class ACommands{
 
     public static CommandBase[] commands=
     {
-        new Test1(),
+        /*new Test1(),
         new Test2(),
-        new Test3(),
-        new Cp()
+        new Test3(),*/
+        new Hs(),
+        new Hs1()
     };
 
-    private static class Test1 extends CommandBase{
+    /*private static class Test1 extends CommandBase{
 
         @Override
         public String getCommandName() {
@@ -88,22 +93,65 @@ public class ACommands{
 
             AChat.chatServToPlayer(entityplayer, message, style);
         }
-    }
-    private static class Cp extends CommandBase{
+    }*/
+    private static class Hs extends CommandBase{
 
         @Override
         public String getCommandName() {
-            return "cp";
+            return "hs";
         }
 
         @Override
         public String getCommandUsage(ICommandSender sender) {
-            return "cp";
+            return "/hs";
         }
 
         @Override
         public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+            EntityPlayer entityplayer = getCommandSenderAsPlayer(sender);
+            ItemStack testItemStack = entityplayer.getHeldItem(entityplayer.getActiveHand());
+            if (testItemStack==null) AChat.chatServToPlayer((EntityPlayerMP)entityplayer, "ItemStack=null");
+            else {
+                LotObject lot = new LotObject();
+                lot.addLotFromGame(testItemStack);
 
+                AChat.chatServToPlayer((EntityPlayerMP) entityplayer, String.valueOf(lot.getId()) + ":"
+                        + String.valueOf(lot.getMeta()) + ", " + lot.getName());
+                if (lot.getNbt() != null)
+                    AChat.chatServToPlayer((EntityPlayerMP) entityplayer, "Nbt=" + lot.getNbt().toString());
+                else
+                    AChat.chatServToPlayer((EntityPlayerMP) entityplayer, "Nbt=null");
+            }
+        }
+    }
+    private static class Hs1 extends CommandBase{
+
+        @Override
+        public String getCommandName() {
+            return "hs1";
+        }
+
+        @Override
+        public String getCommandUsage(ICommandSender sender) {
+            return "/hs1";
+        }
+
+        @Override
+        public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+            EntityPlayer entityplayer = getCommandSenderAsPlayer(sender);
+            ItemStack testItemStack = entityplayer.inventory.getStackInSlot(17);
+            if (testItemStack==null) AChat.chatServToPlayer((EntityPlayerMP)entityplayer, "ItemStack=null");
+            else {
+                LotObject lot = new LotObject();
+                lot.addLotFromGame(testItemStack);
+
+                AChat.chatServToPlayer((EntityPlayerMP) entityplayer, String.valueOf(lot.getId()) + ":"
+                        + String.valueOf(lot.getMeta()) + ", " + lot.getName());
+                if (lot.getNbt() != null)
+                    AChat.chatServToPlayer((EntityPlayerMP) entityplayer, "Nbt=" + lot.getNbt().toString());
+                else
+                    AChat.chatServToPlayer((EntityPlayerMP) entityplayer, "Nbt=null");
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 public class LotObject{
-    private ItemStack lot;
+    private AItemStack lot;
 
     private EntityPlayerMP seller;      //продавец товара
     /*private Date dateStart;     //дата старта аукциона
@@ -21,62 +21,12 @@ public class LotObject{
     private PricesList pricesList;//список вариантов продаж
     private int amount;         //количество продаваемых предметов (вместо стака)
 
-    public static final int PRICECOUNT = 5;    //лимит итемов в одной ставке
-    public static final int PRICESCOUNT = 5;   //лимит различных ставок для лота
 
 
     /**
-     * Список вариантов продаж.
-     * (ограничение количества потому что так надо вот)
+     * @param item - Итем для аукциона
      */
-    public class PricesList{
-        public PriceList[] pricesList = new PriceList[PRICESCOUNT];
-
-        /**
-         * @param prices - варианты продаж(с лимитом)
-         * @return заполненный список вариантов продаж
-         */
-        public PricesList addPricesList(PriceList... prices){
-            if (prices.length > PRICESCOUNT){
-                //ДОПИСАТЬ СООБЩЕНИЕ О ОШИБКЕ ПЕРЕПОЛНЕНИЯ
-                return null;
-            }
-            int i=0;
-            for (PriceList pl:prices) {//заполнение
-                this.pricesList[i]=pl;
-                i+=1;
-            }
-            return this;
-        }
-
-    }
-    public class PriceList{
-        public ItemStack[] itemsStack = new ItemStack[PRICECOUNT];
-
-        /**
-         * @param items - список итемов
-         * @return заполненный итемами вариант продажи
-         */
-        public PriceList addItems(ItemStack... items){
-            if (items.length > PRICECOUNT){
-                //ДОПИСАТЬ СООБЩЕНИЕ О ОШИБКЕ ПЕРЕПОЛНЕНИЯ
-                return null;
-            }
-            int i=0;
-            for (ItemStack is:items) {//заполнение
-                this.itemsStack[i]=is;
-                i+=1;
-            }
-            return this;
-        }
-    }
-
-
-    /**
-     * Use the verification before!
-     * @param item - object for auction
-     */
-    public void addLotFromGame(ItemStack item  /*ДОПИСАТЬ*/   ){
+    public void addLotFromGame(AItemStack item  /*ДОПИСАТЬ*/   ){
         this.lot=item;
     }
 
@@ -87,7 +37,7 @@ public class LotObject{
      * @param prices список вариантов обмена
      * @param dateLong продолжительность аукциона
      */
-    public void addLotFromGame(ItemStack item, EntityPlayerMP seller, int amount, PricesList prices,
+    public void addLotFromGame(AItemStack item, EntityPlayerMP seller, int amount, PricesList prices,
                                Date dateLong){
         this.lot=item;
         this.seller=seller;
@@ -101,22 +51,22 @@ public class LotObject{
     }
 
     public String getName() {
-        return lot.getDisplayName();
+        return lot.getItemStack().getDisplayName();
     }
     public int getId(){
         //return lot.getItem().getRegistryName().toString(); //нет, через регистр предметов Forge ПРОВЕРИТЬ!!!
         //return GameData.getItemRegistry().getId(lot.getItem());   //нет
-        return Item.REGISTRY.getIDForObject(lot.getItem());
+        return Item.REGISTRY.getIDForObject(lot.getItemStack().getItem());
 
     }
     public int getMeta(){
-        return lot.getMetadata();
+        return lot.getItemStack().getMetadata();
     }
     public int getAmount(){
         return  this.amount;    //отметается:lot.stackSize; - мб более стака
     }
     public NBTTagCompound getNbt(){
-        return lot.getTagCompound();
+        return lot.getItemStack().getTagCompound();
     }
 
 

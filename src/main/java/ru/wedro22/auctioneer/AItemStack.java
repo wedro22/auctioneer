@@ -6,14 +6,12 @@ import net.minecraft.item.ItemStack;
  * ItemStack, не ограниченный стаком
  */
 public class AItemStack {
-    public ItemStack item;
-    public Integer amount;
+    private ItemStack item;
+    private Integer amount;
 
     //ДОДЕЛАТЬ!!! - возможный случай переполнения int, приват переменных
 
     /**
-     *
-     * @param itemStack
      * @param i количество итемов
      */
     AItemStack(ItemStack itemStack, int i){
@@ -21,18 +19,22 @@ public class AItemStack {
         this.amount=i;
     }
 
+    public AItemStack addAItemStack(ItemStack itemStack, int i){
+        return new AItemStack(itemStack,i);
+    }
+
     /**
      * @return количество ПОЛНЫХ стаков
      */
     public int getFullStacks(){
-        return this.amount/item.getMaxStackSize();
+        return this.amount/this.item.getMaxStackSize();
     }
 
     /**
      * @return количество итемов в ОСТАВШЕМСЯ стаке
      */
     public int getNotFullStack(){
-        return this.amount-(this.getFullStacks()*item.getMaxStackSize());
+        return this.amount-(this.getFullStacks()*this.item.getMaxStackSize());
     }
 
     /**

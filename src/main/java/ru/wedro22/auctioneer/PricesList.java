@@ -5,13 +5,14 @@ package ru.wedro22.auctioneer;
  * Массив вариантов продаж
  * Массив вариантов продаж(лимит:PRICESCOUNT),
  * имеет информацию о изменении цен при ставках
- * Варианты продаж хранят массив AItemStack(лимит:PRICECOUNT),
- * имеют информацию о выкупе, росте цены для выкупа
- *
+ * Варианты продаж хранят массив APItemStack(лимит:PRICECOUNT),
+ * имеют информацию о выкупе, росте цены для выкупа.
+ * Рост цены идет скачками, при ручном вводе цены идет округление.
+ * Округление делается до ближайшего целого числа, если *.5 - то до большего.
  */
 public class PricesList{
 
-    //ДОДЕЛАТЬ!!! -множитель цены, загрузка констант из конфига
+    //ДОДЕЛАТЬ!!! загрузка констант из конфига, игнор/не игнор нбт, проверка подходит ли итем для покупки
 
     public static final int PRICECOUNT = 5;     //лимит итемов в одной ставке
     public static final int PRICESCOUNT = 5;    //лимит различных ставок для лота
@@ -23,7 +24,7 @@ public class PricesList{
     /**
      * Массив вариантов продаж
      * @param prices варианты продаж (лимит - PRICESCOUNT)
-     * @throws PricesException
+     * @throws PricesException - исключение при переполнении массивов
      */
     PricesList(PriceList... prices) throws PricesException {
         if (prices.length > PRICESCOUNT)
@@ -71,12 +72,46 @@ public class PricesList{
     public double getNFactor(int n){
         return factor+COEFFICIENT*n;
     }
-    /**                                                     //ПЕРЕДЕЛАТЬ!!!
-     * @param f устанавливает новый текущий множитель цен
+
+    /**
+     * @param d устанавливает новый текущий множитель цен
      */
-    public void setFactor(double f){
-        factor = f;
+    public void setFactor(double d){
+        factor = d;
     }
+
+    /**
+     * @param d устанавливает новый текущий множитель цен С ОКРУГЛЕНИЕМ
+     */
+    public void setFactorRound(double d){
+        factor = round(d);
+    }
+
+    /**
+     * @param d округляемое число
+     * @return число, кратное ступени минимальной ставки, если=0 - вернет ступень
+     */
+    public static double round(double d) {  //НЕ ЛУЧШИЙ СПОСОБ, ПОТОМ ПЕРЕДЕЛАТЬ В ПОБИТОВЫЕ
+        double dd = (Math.round(d/COEFFICIENT))*COEFFICIENT;
+        return (dd!=0) ? dd : COEFFICIENT;
+    }
+
+    /**
+     * @return количество итемов, хранящееся в AItemStack
+     */
+    public static int getItemAmount(AItemStack aIS) {
+        return aIS.getAmount();
+    }
+
+    /**
+     * @param factor - текущий множитель цены этой продажи
+     * @return округленное количество итемов с учетом множителя цены
+     */
+    public static int getItemAmountRound(AItemStack aIS, double factor) {
+        return (int) Math.round(getItemAmount(aIS)*factor);
+    }
+
+
 
 
 
@@ -85,7 +120,7 @@ public class PricesList{
      * Вариант продажи (один из PRICESCOUNT)
      */
     public class PriceList{
-        private AItemStack[] itemsStack = new AItemStack[PRICECOUNT];
+        private APItemStack[] itemsStack = new APItemStack[PRICECOUNT];
         private boolean isBay;  //выкуп
         private boolean isGai;  //рост цен (только для выкупа)
 
@@ -96,11 +131,11 @@ public class PricesList{
          * @param items - список итемов (лимит - PRICECOUNT)
          * @throws PricesException при переполнении items
          */
-        PriceList(boolean isBayout, boolean isGain, AItemStack... items) throws PricesException{
+        PriceList(boolean isBayout, boolean isGain, APItemStack... items) throws PricesException{
             if (items.length > PRICECOUNT)
                 throw new PricesException("Array overflow in PriceList constructor", PRICECOUNT, items.length);
             int i=0;
-            for (AItemStack is:items) {//заполнение
+            for (APItemStack is:items) {//заполнение
                 this.itemsStack[i]=is;
                 i+=1;
             }
@@ -117,7 +152,7 @@ public class PricesList{
          * @param items - список итемов (лимит - PRICECOUNT)
          * @return заполненный итемами вариант продажи (если не переполнение items, иначе - null)
          */
-        public PriceList addPriceList(boolean isBayout, boolean isGain, AItemStack... items){
+        public PriceList addPriceList(boolean isBayout, boolean isGain, APItemStack... items){
             try {
                 return new PriceList(isBayout, isGain, items);
             } catch (PricesException e) {
@@ -127,14 +162,24 @@ public class PricesList{
             return null;
         }
 
-        public AItemStack[] getItems(){
+
+        /**
+         * @return массив предметов для этого варианта продажи.
+         */
+        public APItemStack[] getItems(){
             return this.itemsStack;
         }
 
+        /**
+         * @return true, если выкуп
+         */
         public boolean isBayout(){
             return this.isBay;
         }
 
+        /**
+         * @return true, если для ВЫКУПА установлен рост цен от ставок
+         */
         public boolean isGain(){
             return this.isGai;
         }
@@ -142,7 +187,7 @@ public class PricesList{
     }
 
     /**
-     * Ошибка переполнения массивов
+     * Исключение переполнения массивов
      */
     public class PricesException extends Exception{
         private int numberNorm;

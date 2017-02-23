@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import ru.wedro22.auctioneer.AItemStack;
 import ru.wedro22.auctioneer.LotObject;
 
 /**
@@ -22,8 +23,9 @@ public class ACommands{
         /*new Test1(),
         new Test2(),
         new Test3(),*/
-        new Hs(),
-        new Hs1()
+        //new Hs(),
+        //new Hs1()
+        new tst()
     };
 
     /*private static class Test1 extends CommandBase{
@@ -94,6 +96,7 @@ public class ACommands{
             AChat.chatServToPlayer(entityplayer, message, style);
         }
     }*/
+    /*
     private static class Hs extends CommandBase{
 
         @Override
@@ -149,6 +152,36 @@ public class ACommands{
                         + String.valueOf(lot.getMeta()) + ", " + lot.getName());
                 if (lot.getNbt() != null)
                     AChat.chatServToPlayer((EntityPlayerMP) entityplayer, "Nbt=" + lot.getNbt().toString());
+                else
+                    AChat.chatServToPlayer((EntityPlayerMP) entityplayer, "Nbt=null");
+            }
+        }
+    }*/
+
+    private static class tst extends CommandBase{
+
+        @Override
+        public String getCommandName() {
+            return "tst";
+        }
+
+        @Override
+        public String getCommandUsage(ICommandSender sender) {
+            return "/tst";
+        }
+
+        @Override
+        public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+            EntityPlayer entityplayer = getCommandSenderAsPlayer(sender);
+            ItemStack testItemStack = entityplayer.getHeldItem(entityplayer.getActiveHand());
+            AItemStack tst = AItemStack.addAItemStack(testItemStack, 1);
+            if (tst==null) AChat.chatServToPlayer((EntityPlayerMP)entityplayer, "AItemStack=null");
+            else {
+
+                AChat.chatServToPlayer((EntityPlayerMP) entityplayer, tst.getId() + " ; "
+                        + String.valueOf(tst.getMeta()) + " , " + tst.getName());
+                if (tst.getNbt() != null)
+                    AChat.chatServToPlayer((EntityPlayerMP) entityplayer, "Nbt=" + tst.getNbt().toString());
                 else
                     AChat.chatServToPlayer((EntityPlayerMP) entityplayer, "Nbt=null");
             }

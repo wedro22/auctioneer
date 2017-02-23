@@ -1,10 +1,9 @@
 package ru.wedro22.auctioneer;
 
 
+import com.sun.istack.internal.NotNull;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import ru.wedro22.auctioneer.util.ADate;
 
 
 import java.util.Date;
@@ -14,47 +13,32 @@ public class LotObject{
     private AItemStack lot;
 
     private EntityPlayerMP seller;      //продавец товара
-    /*private Date dateStart;     //дата старта аукциона
+    private Date dateStart;     //дата старта аукциона
     private Date dateEnd;       //дата конца аукциона
-    private Date dateServSaved; //дата сохранения сервера*/
     private Date dateLong;      //продолжительность аукциона (от старта до конца)
     private PricesList pricesList;//список вариантов продаж
-    private int amount;         //количество продаваемых предметов (вместо стака)
 
 
 
-    /**
-     * @param item - Итем для аукциона
-     */
-    public void addLotFromGame(AItemStack item  /*ДОПИСАТЬ*/   ){
+
+    public LotObject(@NotNull AItemStack item, @NotNull PricesList prices, @NotNull EntityPlayerMP player,
+                     @NotNull Date dateLong){
         this.lot=item;
-    }
-
-    /**
-     * @param item предмет для аукциона
-     * @param seller продавец
-     * @param amount количество предметов (может быть больше стака)
-     * @param prices список вариантов обмена
-     * @param dateLong продолжительность аукциона
-     */
-    public void addLotFromGame(AItemStack item, EntityPlayerMP seller, int amount, PricesList prices,
-                               Date dateLong){
-        this.lot=item;
-        this.seller=seller;
-        this.amount=amount;
+        this.seller=player;
         this.pricesList=prices;
+        this.dateStart=ADate.currentDate();
         this.dateLong=dateLong;
+        this.dateEnd=ADate.sumDate(this.dateStart, this.dateLong);
     }
 
-    public LotObject getLotFromBD(){
-        return null;            //not yet ready!!!
+    public boolean addLotToBD(@NotNull LotObject lotObject) {
+        return false; // @todo
     }
 
-
-
-    public int getAmount(){
-        return  this.amount;    //отметается:lot.stackSize; - мб более стака
+    public LotObject getLotFromBD(/*todo*/) {
+        return null; // @todo
     }
+
 
 
 

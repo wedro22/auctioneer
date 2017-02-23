@@ -22,7 +22,7 @@ public class AItemStack {
         this.amount=i;
     }
 
-    public AItemStack addAItemStack(ItemStack itemStack, int i){
+    public static AItemStack addAItemStack(ItemStack itemStack, int i){
         return new AItemStack(itemStack,i);
     }
 
@@ -69,13 +69,17 @@ public class AItemStack {
         return getName(this.getItemStack());
     }
 
-    public static int getId(ItemStack iS) {
-        return iS.getItem().REGISTRY.getIDForObject(iS.getItem());
+    /**
+     * @param iS
+     * @return строка типа minecraft:sand    minecraft:bucket
+     */
+    public static String getId(ItemStack iS) {
+        return iS.getItem().getRegistryName().toString();
     }
-    public static int getId(AItemStack aIS) {
+    public static String getId(AItemStack aIS) {
         return getId(aIS.getItemStack());
     }
-    public int getId(){
+    public String getId(){
         return getId(this.getItemStack());
     }
 

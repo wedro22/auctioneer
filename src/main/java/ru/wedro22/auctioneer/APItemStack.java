@@ -19,7 +19,7 @@ public class APItemStack extends AItemStack {
         this.useNBT=useNBT;
     }
 
-    public APItemStack addAPItemStack(ItemStack itemStack, int i, boolean useNBT){
+    public static APItemStack addAPItemStack(ItemStack itemStack, int i, boolean useNBT){
         return new APItemStack(itemStack,i,useNBT);
     }
 

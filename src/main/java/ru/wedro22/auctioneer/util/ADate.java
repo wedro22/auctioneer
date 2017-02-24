@@ -1,9 +1,6 @@
 package ru.wedro22.auctioneer.util;
 
 
-import com.sun.istack.internal.NotNull;
-
-import javax.annotation.Nonnull;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,7 +30,7 @@ public class ADate {
     /**
      * @return результат сложения Date
      */
-    public static Date sumDate(@NotNull Date dt1, @NotNull Date dt2) {
+    public static Date sumDate(Date dt1, Date dt2) {
         long sum=dt1.getTime()+dt2.getTime();
         Date dt=new Date();
         dt.setTime(sum);

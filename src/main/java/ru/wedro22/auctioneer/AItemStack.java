@@ -2,6 +2,7 @@ package ru.wedro22.auctioneer;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * ItemStack, не ограниченный стаком, работа со стаками.
@@ -71,15 +72,15 @@ public class AItemStack {
 
     /**
      * @param iS
-     * @return строка типа minecraft:sand    minecraft:bucket
+     * @return объект, имеющий .toString типа minecraft:sand    minecraft:bucket
      */
-    public static String getId(ItemStack iS) {
-        return iS.getItem().getRegistryName().toString();
+    public static ResourceLocation getId(ItemStack iS) {
+        return iS.getItem().getRegistryName();
     }
-    public static String getId(AItemStack aIS) {
+    public static ResourceLocation getId(AItemStack aIS) {
         return getId(aIS.getItemStack());
     }
-    public String getId(){
+    public ResourceLocation getId(){
         return getId(this.getItemStack());
     }
 

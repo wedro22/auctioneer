@@ -38,18 +38,16 @@ public class DB {
     }
 
     /**
-     * @return true, если БД закрылась/не была открыта
+     * Закрыть БД
      */
-    public static boolean close(){
+    public static void close(){
         if (db!=null) {
             try {
                 db.close();
             } catch (SQLException e) {
                 e.printStackTrace();
-                return  false;
             }
         }
-        return true;
     }
 
     /**
@@ -68,16 +66,26 @@ public class DB {
      * @return true, если успешно
      * @throws SQLException
      */
-    public boolean addLot(LotObject lot) throws SQLException {
-        if (!this.isInit()) {
+    public static boolean addLot(LotObject lot) {  //Сразу ловим покемонов в Try/Catch
+        if (isInit()) {
+            // @todo
             return false;
         }
         if (lot==null) {
+            // @todo
             return false;
         }
-        Savepoint save = db.setSavepoint();     //Конец близок!
-        Statement st=db.createStatement();
+        Savepoint save = null;     //Конец близок!
+        Statement st=null;
+        try {
+            save = db.setSavepoint();
+            st=db.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
 
+        // @todo
         //st.addBatch("INSERT INTO auctioneer SET "+lotToString(lot));  //НЕВЕРНО
         //ДОДЕЛАТЬ!!!
         //сохранение объекта продажи
@@ -88,17 +96,27 @@ public class DB {
             st.executeBatch();      //!
         } catch (SQLException e) {
             e.printStackTrace();
-            db.rollback(save);                  //Конец.
+            try {
+                db.rollback(save);          //Конец
+            } catch (SQLException e1) {
+                e1.printStackTrace();       //Доигрались
+                return false;
+            }
             return false;
         }
-        db.commit();
-        return true;
+        try {
+            db.commit();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
      * @return строка для итема в виде части sql, для сохранения
      */
-    private String itemToString(AItemStack item) {
+    private static String itemToString(AItemStack item) {
         //ДОДЕЛАТЬ!!!   @todo
         return null;
     }
